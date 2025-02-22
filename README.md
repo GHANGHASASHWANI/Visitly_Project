@@ -1,8 +1,8 @@
-# WanderLust Project
+# Visitly - Gateway To Your Memorable Stays!
 
 Project Summary:
 
-I have successfully designed and implemented a full-stack Airbnb clone, which replicates the core functionality of the Airbnb platform. This project encompasses various components, including a user-friendly front-end interface, a dynamic back-end server, and a robust database system and also implemented Map API features to locate the rental homes with MVC Framework. Below are the key features and technologies used in this Airbnb clone:
+At Visitly, we believe that every journey begins with the perfect stay. Inspired by the convenience and flexibility of modern travel platforms, we have built a feature-rich vacation rental marketplace that caters to both commercial and non-commercial properties. Whether you’re a traveler looking for a cozy getaway or a host seeking to list your property, Visitly offers a seamless and secure experience.
 
 Front-end:
 1. Developed a responsive web application using modern HTML, CSS, and JavaScript.
@@ -30,4 +30,4 @@ The Airbnb clone project showcases my proficiency in full-stack web development,
 
 ## Deployment
 
-I have deployed my project using render connected with MongoDB Atlas
+We have deployed my project using render connected with MongoDB Atlas
