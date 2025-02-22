@@ -1,0 +1,160 @@
+
+<script>
+    const key_value = "<%= process.env.key_razorpay %>";
+  </script>
+<% layout("/layouts/boilerplate") %>
+    <br>
+    <br>
+    <main class="container mx-auto px-6 py-12 flex items-center justify-center min-h-screen">
+        <div class="col-6 offset-3 my-4 offerContainer text-center">
+            <br>
+            <br>
+            <h1 class="text-align: center; font-weight: bold;">Checkout</h1>
+            <p class="mb-2 mt-4 text-lg text-gray-600" style="font-size: 1.2rem;">Proceed to rent the listing: <strong><%= listing.title %></strong></p>
+            <p class="mb-4 text-xl font-semibold text-gray-800"  style="font-size: 1.2rem;">Price: ₹<%= (listing.price * 1.18).toFixed(2) %> ( inclusive of taxes ) </p>
+
+            
+            <!-- Razorpay Button -->
+            <div class="flex justify-center">
+                <button id="rzp-button1" class="btn btn-outline-light">
+                    <i class="fas fa-money-bill" style="padding-right: 10px;"></i><b>
+                        Proceed to Pay
+                    </b> 
+                </button>
+            </div>
+            <br>
+            <br>
+        </div>
+    </main>
+    <br>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            key: "rzp_test_1DP5mmOlF5G5ag", // Enter the Key ID generated from the Dashboard
+            amount: "<%= listing.price * 118 %>", // Convert to paise (1 INR = 100 paise)
+            currency: "INR",
+            description: "Visitly - Rent Listing",
+            image: "/images/logo-transparent-svg.svg",
+            prefill: {
+                email: "<%= user.email %>", // Pre-fill email from the user object
+                contact: "<%= user.contact %>", // Pre-fill contact from the user object
+            },
+            theme: {
+            color: "#155d5d", // Set the button color to blue (this will affect the main button)
+            font: "Arial, sans-serif", // Set the font for the checkout form
+            },
+            config: {
+                display: {
+                    blocks: {
+                        utib: {
+                            name: "Pay using Axis Bank",
+                            instruments: [
+                                {
+                                    method: "card",
+                                    issuers: ["UTIB"],
+                                },
+                                {
+                                    method: "netbanking",
+                                    banks: ["UTIB"],
+                                },
+                            ],
+                        },
+                        other: {
+                            name: "Other Payment modes",
+                            instruments: [
+                                {
+                                    method: "card",
+                                    issuers: ["ICIC"],
+                                },
+                                {
+                                    method: "netbanking",
+                                },
+                            ],
+                        },
+                        banks: {
+                            name: "Most Used Methods",
+                            instruments: [
+                                {
+                                    method: "wallet",
+                                    wallets: ["freecharge"],
+                                },
+                                {
+                                    method: "upi",
+                                },
+                            ],
+                        },
+                    },
+                    sequence: ["block.utib", "block.other", "block.banks"],
+                    preferences: {
+                        show_default_blocks: false,
+                    },
+                },
+            },
+        //     handler: function (response) {
+        //     fetch("/payment-success", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({
+        //             // payment_id: response.razorpay_payment_id,
+        //             payment_id: "test_payment_id_123456",
+        //             listing_id: "<%= listing._id %>", // Send listing ID
+        //         }),
+        //     })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             alert("Payment Successful! Order Approved ✅");
+        //             window.location.href = data.redirectUrl;// Redirect
+        //         } else {
+        //             alert("Payment successful, but status update failed.");
+        //         }
+        //     })
+        //     .catch(err => console.error("Error:", err));
+        // },
+        handler: function (response) {
+            console.log("✅ Razorpay Payment Successful:", response);
+
+            fetch("/rent/payment-success", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    payment_id: response.razorpay_payment_id, // Use actual payment ID
+                    listing_id: "<%= listing._id %>",
+                }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("📨 Server Response:", data);
+                if (data.success) {
+                    alert("✅ Payment Successful! Order Approved");
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert("⚠️ Payment successful, but order processing failed.");
+                }
+            })
+            .catch(err => console.error("🚨 Fetch Error:", err));
+        },
+        modal: {
+            ondismiss: function () {
+                if (confirm("Are you sure, you want to close the form?")) {
+                    console.log("Checkout form closed by the user");
+                } else {
+                    console.log("Complete the Payment");
+                }
+            },
+        },
+        };
+
+        var rzp1 = new Razorpay(options);
+        document.getElementById("rzp-button1").onclick = function (e) {
+            console.log("🟢 Opening Razorpay Checkout..."); 
+            rzp1.open();
+            e.preventDefault();
+        };
+
+    </script>
+
+
+</body>
+
+</html>

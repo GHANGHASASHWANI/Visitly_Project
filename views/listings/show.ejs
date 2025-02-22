@@ -1,0 +1,360 @@
+<% layout("/layouts/boilerplate") %>
+
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const listing = <%- JSON.stringify(listing) %>;
+  const user = <%- JSON.stringify(user) %>;
+</script>
+<div class="row mt-3" id="show-body">
+  <div class="col-8 offset-3">
+    <h3 id="lis-tit"><%= listing.title %></h3>
+  </div>
+  <div class="card col-6 offset-3 show-card listing-card">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+    <div id="panorama"></div>
+    <script>
+    pannellum.viewer('panorama', {
+        "type": "equirectangular",
+        "panorama": "<%=listing.image.url%>"
+    });
+    </script>
+    <div class="card-body">
+      <p class="card-text mt-2">
+        Hosted by <i><%= listing.owner.username %></i>
+      </p>
+      <p class="card-text"><b>Description : </b><%= listing.description %></p>
+      <p class="card-text">
+        <b>Cost : </b>
+        &#8377; <%= listing.price.toLocaleString("en-IN") %> &nbsp;/ night
+      </p>
+      <p class="card-text"><b>Place : </b><%= listing.location %></p>
+      <p class="card-text"><b>Country : </b><%= listing.country %></p>
+
+      
+      <form action="/listings/<%= listing._id %>/rent" method="POST" class="mb-4">
+        <!-- Outer Div -->
+        <div class="d-flex justify-content-center">
+          <div class="row mb-3 align-items-center" style="gap: 20px;"> <!-- Added custom gap -->
+            <!-- Start Date -->
+            <div class="col-auto">
+              <label for="rentStartDate" class="form-label"><b>Check-In</b></label>
+              <input type="date" name="rentStartDate" class="form-control" required min="" id="rentStartDate">
+            </div>
+            <!-- End Date -->
+            <div class="col-auto">
+              <label for="rentEndDate" class="form-label"><b>Check-Out</b></label>
+              <input type="date" name="rentEndDate" class="form-control" required min="" id="rentEndDate">
+            </div>
+      
+            <script>
+              // Set the current date as the minimum date for both inputs
+              const today = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
+              document.getElementById('rentStartDate').setAttribute('min', today);
+              document.getElementById('rentEndDate').setAttribute('min', today);
+            </script>
+          </div>
+        </div>
+        
+        <!-- Hidden Inputs -->
+        <input type="hidden" name="rentPrice" value="<%= listing.price %>">
+        <input type="hidden" name="renterId" value="<%= user._id %>">
+        
+        <!-- Action (to distinguish between Add to Cart and Proceed to Rent) -->
+        <input type="hidden" name="action" value="">
+      
+        <!-- Buttons -->
+        <div class="d-flex justify-content-center mt-3">
+          <button type="submit" class="btn btn-primary" style="border-radius: 30px 30px 30px 30px; margin-right: 50px;" name="action" value="add_to_cart">Add to Cart</button>
+          <button type="submit" class="btn btn-primary" style="border-radius: 30px 30px 30px 30px; margin-left: 50px;" name="action" value="proceed_to_rent">
+             Rent Now
+          </button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+  
+  <br />
+  <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+  <div class="btns mb-5" style="margin-left: 10px">
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
+
+    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+      <button class="btn btn-dark offset-5">Delete</button>
+    </form>
+  </div>
+  <% } %>
+
+  <!--------------------------- Review start here ------------------------------->
+
+  <div class="col-8 offset-3 mb-3">
+    <% if(currUser) { %>
+    <hr class="hrshow" />
+    <h4 style="text-shadow:  1px 0 #ffffff,
+                1px 1px 0 #ffffff,
+                1px -1px 0 #ffffff,
+                -1px -1px 0 #ffffff;">Leave a Review</h4>
+    <form
+      action="/listings/<%= listing._id %>/reviews"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label"><i id="rating">Rating</i></label>
+        <fieldset class="starability-slot">
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]"
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+      </div>
+      <div class="mb-3 mt-3" id="comments">
+        <label for="comment" class="form-label">Comments</label>
+        <textarea
+          name="review[comment]"
+          id="comment"
+          cols="25"
+          rows="4"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add some comments for review</div>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+
+    <% } %> <% if(listing.reviews.length > 0) { %>
+    <div class="row">
+      <p class="allreview">All Reviews</p>
+      <% for(review of listing.reviews) { %>
+      <div class="card col-5 ms-3 mb-2" id="card-body">
+        <div class="card-body">
+          <h5 class="card-title mt-2">@<%= review.author.username %></h5>
+          <p
+            class="starability-result card-text"
+            data-rating="<%= review.rating %>"
+          ></p>
+          <p class="card-text mb-4"><%= review.comment %></p>
+          <% if(currUser && currUser._id.equals(review.author._id)) {%>
+          <form
+            class="mb-3"
+            method="POST"
+            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+          >
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <% } %>
+  </div>
+
+  <!-----------------= review end =------------------->
+
+  <!--------------------------- Offers start --------------------------->
+
+  <div class="col-6 offset-3 my-4 offerContainer">
+    <h4 style ="text-align: center; font-weight: bold;">What this place offers </h4>
+    <div class="offers">
+      <i class="ri-restaurant-line"><span> Kitchen</span></i>
+      <i class="ri-car-fill"><span> Parking</span></i>
+      <i class="ri-t-shirt-air-fill"><span> Air conditioning</span></i>
+      <i class="ri-tv-2-line"><span> TV</span></i>
+      <i class="ri-vidicon-line"><span> Security cameras</span></i>
+      <i class="ri-wifi-line"><span> Wifi</span></i>
+    </div>
+    <!-- <div class="offers">
+      <button
+        id="offers"
+        type="button"
+        class="btn btn-outline-dark"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Show all 50 amenities
+      </button> -->
+      <!-- Button trigger modal -->
+      <!-- <button
+        id="offers"
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Launch demo modal
+      </button> -->
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                What this place offers
+              </h1>
+              <!-- <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button> -->
+            </div>
+            <div class="modal-body">
+              <ul>
+                <h5>Scenic views</h5>
+                <li>Lake view</li>
+                <li>Mountain view</li>
+                <li>Pool view</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Bathrooms</h5>
+                <li>Cleaning products</li>
+                <li>Shampoo</li>
+                <li>Hot Water</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Bedroom and laundry</h5>
+                <li>Essentials</li>
+                <li>Hangers</li>
+                <li>Bed linen</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Entertainment</h5>
+                <li>TV with standard cable/satellite</li>
+                <li>Sound system with Bluetooth and aux</li>
+                <li>Pool table</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Outdoor</h5>
+                <li>Patio or balcony</li>
+                <li>Garden</li>
+                <li>Hammock</li>
+                <li>Firpit</li>
+                <li>BBQ grill</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Kitchen and dining</h5>
+                <li>Dishes and cutlery</li>
+                <li>Barbecue utensils</li>
+                <li>Dining table</li>
+                <li>Freezer</li>
+                <hr />
+              </ul>
+              <ul>
+                <h5>Locations Features</h5>
+                <li>Waterfront</li>
+                <p>Right next to a body of water</p>
+                <li>Lake access</li>
+                <p>Guests can get to a lake using a path or dock</p>
+                <li>Private entrance</li>
+                <p>Separate street or building entrance</p>
+                <hr />
+              </ul>
+              <ul>
+                <h6>and many more...</h6>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-dark"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <!-- <button type="button" class="btn btn-outline-dark">
+                Save changes
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!------------------= Offers end =----------------->
+
+  <!-------------------------- Map Start -------------------------------->
+  <div class="col-8 offset-3 mb-3">
+    <h4 class="maph3" style="padding-top:20px color= rgb(0, 0, 0);
+            font-size: 30px;
+            text-shadow: -1px 1px 0 #ffffff,
+                1px 1px 0 #ffffff,
+                1px -1px 0 #ffffff,
+                -1px -1px 0 #ffffff;">Where you’ll be</h4>
+    <p
+      class="card-text maph3"
+      id="location-p"
+      style="margin-top: 10px; font-weight: 100 !important; color: rgb(255, 255, 255);
+            font-size: 25px;
+            text-shadow: -1px 1px 0 #000000,
+                1px 1px 0 #000000,
+                1px -1px 0 #000000,
+                -1px -1px 0 #000000;"
+    >
+      <%= listing.location %>, <%= listing.country %>
+    </p>
+    <div style="height: 20px"></div>
+    <div id="map"></div>
+  </div>
+
+  <!-------------------- Map End ----------------------->
+</div>
+
+<script src="/js/map.js"></script>

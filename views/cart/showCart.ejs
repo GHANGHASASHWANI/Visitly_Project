@@ -1,0 +1,54 @@
+<% layout("/layouts/boilerplate") %>
+<% if (requests.length === 0) { %>
+  <div style="height: 21.2vh; margin: 0; display: flex; justify-content: center; align-items: center;">
+    <p style="font-size: 1.4rem; text-align: center;">No rental requests found</p>
+  </div>
+
+  <% } else { %>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% requests.forEach(request => { %> <% if (!request.listing_id) { %> <%
+      console.log("⚠️ Warning: Missing listing_id in request:", request); %> <% }
+      %>
+      <div class="card col listing-card container1 container2 cart1 align-items-center" style="width: 22rem;">
+          <div id="container">
+              <img
+              src="<%=  request.listing_id.image.url 
+                            ? request.listing_id.image.url 
+                            : 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aG90ZWxzfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60' %>"
+              class="card-img-top" alt="listing_image" style="height: 15rem; width:22rem"/>
+          </div>
+          
+          <div class="card-body">
+            <p class="card-text">
+              <strong><%= request.listing_id.title %></strong>
+              <div class="price" style="margin-top: -12px; color: rgb(0, 0, 0);">&#8377; <%= request.listing_id.price %> </div>
+              <strong>Status:</strong><%= request.status %> <br>
+              <strong>Rental Period:</strong>
+              <%= new Date(request.rental_start_date).toLocaleDateString() %> -
+              <%= new Date(request.rental_end_date).toLocaleDateString() %>
+            <div class="d-flex justify-content-between" style="margin-top: 15px; margin-bottom: 20px;">
+              <!-- Proceed to Rent Button -->
+              <form
+                action="/rent/checkout/<%= request.user_id %>/<%= request.listing_id._id %>"
+                method="GET"
+              >
+                <button type="submit" class="btn btn-primary confirm-rent" style="border-radius: 30px 30px 30px 30px;">
+                  Proceed to Rent
+                </button>
+              </form>
+
+              <!-- Delete Button -->
+              <form
+                action="/rent/delete/<%= request._id %>/<%= request.user_id %>"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this item?');"
+              >
+                <button type="submit" class="btn btn-danger" style="border-radius: 30px 30px 30px 30px;">Delete</button>
+              </form>
+            </div>
+            </p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+<% } %>

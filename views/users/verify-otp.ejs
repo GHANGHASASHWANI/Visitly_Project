@@ -1,0 +1,29 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+  <h1 class="col-6 offset-3" style="color: #155d5d" id="log">
+    Verify OTP
+  </h1>
+  <div class="col-6 offset-3">
+    <form
+      action="/verify-otp"
+      method="POST"
+      class="needs-validation"
+      id="custom"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="otp" class="form-label">Enter OTP</label>
+        <input
+          name="otp"
+          id="otp"
+          type="text"
+          class="form-control"
+          required
+        />
+      </div>
+      <button class="btn btn-success" style="background-color:#155d5d !important">Verify</button>
+    </form>
+  </div>
+  <div style="margin-bottom: 40px"></div>
+</div>

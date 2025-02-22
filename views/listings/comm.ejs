@@ -1,0 +1,62 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="responsive">
+  <div class="form-check-reverse form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">    
+    <label class="form-check-label" for="flexSwitchCheckDefault2">Display total after taxes</label>
+  </div>
+</div>
+<h3 style="color: #155d5d; font-size: 2rem; text-align: center; padding-top: 20px;">Commercial Properties</h3>
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for(let listing of commercialListings) { %>
+  <a href="/listings/<%= listing._id %>" class="listing-link">
+    <div class="card col listing-card container1 container2" style="width: 22rem;">
+        <div id="container">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 15rem" />
+        </div>
+        
+        <div class="card-body">
+          <p class="card-text">
+            <strong><%= listing.title %></strong><br><span style="color: rgb(0, 0, 0);"><%= listing.country %></span>
+            <div class="price" style="margin-top: -12px; color: rgb(0, 0, 0);">&#8377; <%= listing.price.toLocaleString("en-IN") %>/ night<br></div>
+            <span class="tax-info" style="text-decoration: underline;">&#8377; <%= (listing.price*1.18).toLocaleString("en-IN") %> &nbsp;after adding taxes</span>
+            <i class="tax-info2" style="text-decoration: underline;">&#8377; <%= (listing.price*1.18).toLocaleString("en-IN") %> &nbsp;after adding taxes</i>
+
+          </p>
+        </div>
+    </div>
+  </a>
+  <% } %>
+</div>
+
+<script>
+  let price = document.getElementsByClassName("price");
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  taxSwitch.addEventListener("click",()=>{  
+    let taxInfo = document.getElementsByClassName("tax-info");
+    for(info of taxInfo) {
+      if(info.style.display != "inline") {
+        info.style.display = "inline";
+        info.style.fontWeight = "bold";
+        info.style.color = "crimson";
+      } else {
+        info.style.display = "none";
+      }
+    }
+  });
+</script>
+
+<script>
+  let taxSwitch2 = document.getElementById("flexSwitchCheckDefault2");
+  taxSwitch2.addEventListener("click",()=>{  
+    let taxInfo2 = document.getElementsByClassName("tax-info2");
+    for(info of taxInfo2) {
+      if(info.style.display != "inline") {
+        info.style.display = "inline";
+        info.style.fontWeight = "bold";
+      } else {
+        info.style.display = "none";
+      }
+    }
+  });
+</script>

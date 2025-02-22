@@ -1,0 +1,139 @@
+<style>
+  .search-btn {
+    background-color: #155d5d;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+  }
+  .search-btn:hover {
+    background-color: #3f8282;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+  }
+  .search-btn i {
+    display: inline;
+    margin-right: 0.5rem;
+  }
+  .search-inp {
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 0.9rem;
+  }
+
+  #responsive-registration {
+    display: none;
+  }
+
+  .dropdown button {
+    margin-left: 120px;
+    width: 80px;
+    height: 44px;
+    border-radius: 22px;
+    background-color: #155d5d;
+  }
+  .dropdown button:hover{
+    background-color: #3f8282 !important;
+  }
+
+  .dropdown-menu {
+    width: 200px;
+    padding: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .dropdown {
+      display: none;
+    }
+
+    #responsive-registration {
+      display: inline;
+    }
+  }
+</style>
+<nav class="navbar navbar-expand-md border-bottom sticky-top container2">
+  <div class="container-fluid">
+    <a href="/listings" class="navbar-brand" style="padding-left: 50px; font-weight: 900; font-size: 30px; color:#155d5d; text-shadow: -1px 1px 0 #97eaea,
+                1px 1px 0 #97eaea,
+                1px -1px 0 #97eaea,
+                -1px -1px 0 #97eaea;">
+      <img src="/images/logo-transparent-svg.svg" alt="Visitly" style="border: none; height: 90px; "></a>
+    <div class="navbar-nav">
+      <a class="nav-link" id="title" href="/listings"></a>
+    </div>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="nav-search nav-hover nav-search-search ms-auto">
+        <form
+          class="d-flex needs-validation"
+          role="search"
+          action="/listings/search"
+          method="get"
+          id="searchBox"
+        >
+          <input
+            class="form-control me-2 search-inp"
+            type="search"
+            placeholder="Search Destiny"
+            aria-label="Search"
+            name="q"
+            id="mySearchInput"
+          />
+          <button class="btn search-btn" type="submit" id="search">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
+        </form>
+      </div>
+      <div class="tax-toggle">
+      <div class="form-check-reverse form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" style="cursor: pointer;">    
+        <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+      </div>
+    </div>
+        
+      <div class="navbar-nav ms-auto">
+        <div class="dropdown">
+          <button
+            class="btn btn-success dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fa-solid fa-circle-user"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <% if(!currUser) { %>
+            <a class="nav-link" href="/signup"><b>Sign up</b></a>
+            <a class="nav-link" href="/login"><b>Log in</b></a>
+            <% } %> <% if(currUser) { %>
+            <a class="nav-link" href="/logout"><b>Log out</b></a>
+            <% } %>
+            <hr />
+            <a class="nav-link" href="/listings/new"><strong>Add new home</strong></a>
+            <a class="nav-link" href="/rent"><strong>View Cart</strong></a>
+            <a class="nav-link" href="/listings/sustain"><strong>Eco-Friendly</strong</a>
+            <a class="nav-link" href="/listings/comm"><strong>Commercial</strong</a>
+          </ul>
+        </div>
+
+        <div id="responsive-registration">
+          <a class="nav-link" href="/listings/new"><strong>Add new home</strong></a>
+          <% if(!currUser) { %>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Log in</b></a>
+          <% } %> <% if(currUser) { %>
+          <a class="nav-link" href="/logout"><b>Log out</b></a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

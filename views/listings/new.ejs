@@ -1,0 +1,107 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+  <div class="col-8 offset-2">
+    <h3 class="mb-3" style="color: #155d5d; font-size: 2rem; text-align: center;" id="create">Create a New Listing</h3>
+    <div class="col-12 offerContainer" style="padding-right: 40px; padding-left: 40px; margin-bottom: 30px;">
+    <form
+      method="POST"
+      action="/listings"
+      novalidate
+      class="needs-validation form1"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          name="listing[title]"
+          placeholder="Add a catchy title"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Title looks good!</div>
+      </div>
+
+      <div class="mb-3 ">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          name="listing[description]"
+          class="form-control"
+          rows="3"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Enter a short description</div>
+      </div>
+
+      <div class="mb-3 ">
+        <label for="image" class="form-label">Upload Image</label>
+        <input name="listing[image]" type="file" class="form-control" />
+      </div>
+
+      <div class="row ">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            name="listing[price]"
+            placeholder="Ex: 4300/-"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter a valid price</div>
+        </div>
+
+        <div class="mb-3 col-md-8 ">
+          <label for="country" class="form-label">Country</label>
+          <input
+            name="listing[country]"
+            placeholder="Ex: India"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter the country name</div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="location" class="form-label">Location</label>
+        <input
+          name="listing[location]"
+          placeholder="Ex: Delhi"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Please enter valid location</div>
+      </div>
+      <div class="mb-4" >
+        <label for="sustainable" class="form-label">Do you have solar panels installed at your property? <br>
+          If yes, do they generate enough energy to power all appliances without using additional electricity?</label>
+        <select
+          name="listing[sustainable]"
+          class="form-select"
+          required>
+          <option value="false" disabled selected>Select an option</option>
+          <option value="true">Yes, they generate enough energy</option>
+          <option value="false">No, they do not generate enough energy</option>
+          <option value="false">No solar panels are installed</option>
+        </select>
+        <div class="invalid-feedback">Please select whether the solar panels are sufficient or not.</div>
+      </div>
+      <div class="mb-2">
+        <label for="commercial" class="form-label">Is it a Commercial Listing?</label>
+        <select
+          name="listing[commercial]"
+          class="form-select"
+          required>
+          <option value="false" disabled selected>Select an option</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+        <div class="invalid-feedback">Please select whether the listing is commercial or not.</div>
+      <button class="btn btn-dark  mt-4 mb-4 mb-3" style="background-color: #155d5d;">Add</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+

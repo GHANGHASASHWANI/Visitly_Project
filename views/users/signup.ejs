@@ -1,0 +1,58 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+  <h1 class="col-6 offset-3" style="color: #155d5d; text-align: center" id="log">
+    Sign Up on Visitly
+  </h1>
+  <div class="col-6 offset-3">
+    <form
+      action="/signup"
+      method="POST"
+      class="needs-validation"
+      id="custom"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          name="username"
+          id="username"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3">
+        <lable for="email" class="form-label">Email</lable>
+        <input
+          name="email"
+          id="email"
+          type="email"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <lable for="password" class="form-label">Password</lable>
+        <input
+          name="password"
+          id="password"
+          type="password"
+          class="form-control"
+          required
+        />
+      </div>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+    <button class="btn btn-success" style="background-color:#155d5d !important;">Sign Up</button>
+    <h5 style=" color: white; margin-top: 10px;">OR</h5>
+</div>
+      <div class="mb-3" style="display: flex; align-items: center; justify-content: space-between;">
+        <button class="btn btn-danger"><a href="/auth/google" style="text-decoration: none; color:white"> <i class="bi bi-google google"></i> &nbsp; | &nbsp;  Sign Up with Google</a></button>
+        <button class="btn btn-primary"><a href="/auth/facebook" style="text-decoration: none; color:white"> <i class="bi bi-facebook fb"></i> &nbsp; | &nbsp; Sign Up with Facebook</a></button>
+      </div>
+      
+    </form>
+  </div>
+  <div style="margin-bottom: 40px"></div>
+</div>
