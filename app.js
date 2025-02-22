@@ -223,7 +223,8 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/auth/facebook/callback",
+      // callbackURL: "http://localhost:8080/auth/facebook/callback",
+      callbackURL: "https://visitly-live.onrender.com/auth/facebook/callback",
       profileFields: ["id", "emails", "name"], // Request profile and email
     },
     async (accessToken, refreshToken, profile, done) => {
